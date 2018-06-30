@@ -23,14 +23,24 @@ router.beforeEach((to, from, next) => {
   let bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
 
   let bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
-
   if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
     if (!to.path.match('wap')) {
       if (to.path === '/') {
-        router.push('/wap/cover');
+        router.push('/wap/home');
         next();
       } else {
         let path = to.path.replace('web', 'wap');
+        router.push(path);
+        next();
+      }
+    }
+  }else{
+    if (!to.path.match('web')) {
+      if (to.path === '/') {
+        router.push('/web/home');
+        next();
+      } else {
+        let path = to.path.replace('wap', 'web');
         router.push(path);
         next();
       }
