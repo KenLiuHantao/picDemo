@@ -1,5 +1,5 @@
 <template>
-  <p>web</p>
+  <div class="fullpage"></div>
 </template>
 
 <script>
@@ -9,5 +9,9 @@
 </script>
 
 <style scoped>
-
+.fullpage{
+  width: 100%;
+  height:100%;
+  color:black;
+}
 </style>
