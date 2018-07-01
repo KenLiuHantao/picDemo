@@ -10,12 +10,16 @@
         <span>-</span>
         <span>Thumbs</span>
       </div>
+      <div class="imageContent">
+        <img :src="activeSrc" alt="">
+      </div>
       <p class="imageIndex" @click="goNext" :class="{imageIndexBottom:imageIndexB}">{{groupName}} {{groupIndex}}/{{groupTotal}}</p>
     </div>
   </div>
 </template>
 
 <script>
+  import imgConfig from '../images/config'
   export default {
     name: "wap-home",
     data() {
@@ -24,10 +28,12 @@
         titleE:false,
         titleL1:false,
         titleL2:false,
-        groupName:'group1',
+        activeGroupIndex:0,
+        groupName:imgConfig[0].name,
         groupIndex:1,
-        groupTotal:20,
+        groupTotal:imgConfig[0].imgList.length,
         imageIndexB:false,
+        activeSrc:imgConfig[0].imgList[0]
       }
     },
     mounted() {
@@ -140,7 +146,16 @@
     justify-content:center;
     align-items:Center;
   }
-  .picTop span{
-
+  .imageContent{
+    position: absolute;
+    width: 100%;
+    padding: 0 20px;
+    height: 80%;
+    top:10%;
+    overflow: hidden;
+  }
+  .imageContent img{
+    max-width: 100%;
+    height: auto;
   }
 </style>
