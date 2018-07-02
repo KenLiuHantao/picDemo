@@ -1,17 +1,18 @@
 <template>
   <div>
     <div class="fullpage1" :class="{leave:fullL}">
-      <p v-show="titleE" class="beginTitle1" :class="{titleLeave:titleL1}">title1</p>
-      <p v-show="titleE" class="beginTitle2" :class="{titleLeave:titleL2}">title2</p>
+      <p v-show="titleE" class="beginTitle1" :class="{titleLeave:titleL1}">Jack Davison</p>
+      <p v-show="titleE" class="beginTitle2" :class="{titleLeave:titleL2}">Photo Grapher</p>
     </div>
     <div class="fullpage2">
       <div class="picTop">
         <span>Index</span>
-        <span>-</span>
+        <span class="midLine"></span>
         <span>Thumbs</span>
       </div>
       <div class="imageContent">
-        <img :src="activeSrc" alt="">
+          <img :src="activeSrc" alt="">
+
       </div>
       <p class="imageIndex" @click="goNext" :class="{imageIndexBottom:imageIndexB}">{{groupName}} {{groupIndex}}/{{groupTotal}}</p>
     </div>
@@ -96,8 +97,9 @@
     top: 50%;
     left: 20%;
     color:white;
-    font-size: 12px;
+    font-size: 14px;
     opacity: 1;
+    font-weight: bold;
     transform:translate(-50%,-50%);
   }
   .beginTitle2{
@@ -105,8 +107,9 @@
     top:50%;
     left: 60%;
     color:white;
-    font-size: 12px;
+    font-size: 14px;
     opacity: 1;
+    /*font-weight: bold;*/
     transform:translate(-50%,-50%);
   }
   .titleLeave{
@@ -124,6 +127,7 @@
     overflow: hidden;
   }
   .imageIndex{
+    font-weight: bold;
     position: absolute;
     bottom:45%;
     left:50%;
@@ -146,16 +150,41 @@
     justify-content:center;
     align-items:Center;
   }
+  .picTop span{
+    font-size: 12px;
+    font-weight: bolder;
+    font-family: Untitled Sans Medium,Helvetica,Arial,sans-serif;
+    font-style: normal;
+  }
+  .picTop .midLine{
+    display: inline-block;
+    width: 19px;
+    height: 1px;
+    background-color: #fff;
+    margin: 0 5px;
+    border-bottom: 1px black solid;
+    top: 1px;
+  }
   .imageContent{
     position: absolute;
     width: 100%;
-    padding: 0 20px;
     height: 80%;
     top:10%;
     overflow: hidden;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
   }
   .imageContent img{
-    max-width: 100%;
-    height: auto;
+    width: calc(100% - 40px);
+    height:auto;
+    will-change: opacity,transform;
+    opacity: 1;
+    top:0px;
+    bottom:0px;
+    left:0px;
+    right:0;
+    margin:auto;
+    position: absolute;
   }
 </style>
