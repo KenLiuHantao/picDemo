@@ -4,17 +4,36 @@
       <p v-show="titleE" class="beginTitle1" :class="{titleLeave:titleL1}">Jack Davison</p>
       <p v-show="titleE" class="beginTitle2" :class="{titleLeave:titleL2}">Photo Grapher</p>
     </div>
-    <div class="fullpage2">
+    <div class="fullpage2" :class="{indexOpen:rightOpen}">
       <div class="picTop">
-        <span>Index</span>
-        <span class="midLine"></span>
+        <span @click="openRightIndex">Index</span>
+        <span class="midLine1"></span>
         <span>Thumbs</span>
       </div>
-      <div class="imageContent">
+      <div class="imageContent"  @click="goOther">
           <img :src="activeSrc" alt="">
 
       </div>
-      <p class="imageIndex" @click="goNext" :class="{imageIndexBottom:imageIndexB}">{{groupName}} {{groupIndex}}/{{groupTotal}}</p>
+      <p class="imageIndex"  @click="goOther" :class="{imageIndexBottom:imageIndexB}">{{groupName}} {{groupIndex+1}}/{{groupTotal}}</p>
+    </div>
+    <div class="rightIndex" :class="{rightIndexActive:rightOpen}">
+      <div class="rightTitle" >
+        <span>Email</span>
+        <span class="midLine2"></span>
+        <span>Instagram</span>
+        <span class="midLine2"></span>
+        <span style="font-weight: bold">Mini Title</span>
+        <span class="close">
+          <svg @click="closeRightIndex" viewBox="0 0 45 45"><title>Close 1.1</title><path d="M22.5 21.5L44 0l1 1-21.5 21.5L45 44l-1 1-21.5-21.5L1 45l-1-1 21.5-21.5L0 1l1-1z"></path><path d="M22.5 21.5L44 0l1 1-21.5 21.5L45 44l-1 1-21.5-21.5L1 45l-1-1 21.5-21.5L0 1l1-1z"></path></svg>
+        </span>
+      </div>
+       <div class="groupDiv">
+         <ul>
+           <li v-for="item in imgConfig" @click="gotoIndex(item)">
+             {{item.name}} ({{item.imgList.length}})
+           </li>
+         </ul>
+       </div>
     </div>
   </div>
 </template>
@@ -29,12 +48,24 @@
         titleE:false,
         titleL1:false,
         titleL2:false,
+        rightOpen:false,
         activeGroupIndex:0,
-        groupName:imgConfig[0].name,
-        groupIndex:1,
-        groupTotal:imgConfig[0].imgList.length,
+        imgConfig:imgConfig,
+        groupIndex:0,
+        imgIndex:0,
         imageIndexB:false,
-        activeSrc:imgConfig[0].imgList[0]
+
+      }
+    },
+    computed:{
+      groupName(){
+        return this.imgConfig[this.groupIndex].name
+      },
+      groupTotal(){
+        return this.imgConfig[this.groupIndex].imgList.length
+      },
+      activeSrc(){
+        return this.imgConfig[this.groupIndex].imgList[this.imgIndex]
       }
     },
     mounted() {
@@ -68,8 +99,32 @@
           that.imageIndexB=true;
         },1000)
       },
+      goOther(e){
+        let width=window.screen.width;
+        if(e.offsetX>width/2){
+          this.goNext();
+        }else{
+          this.goBefore();
+        }
+      },
       goNext(){
+        if(this.imgIndex<this.imgConfig[this.groupIndex].imgList.length-1){
+          this.imgIndex++
+        }
+      },
+      goBefore(){
+        if(this.imgIndex>0){
+          this.imgIndex--
+        }
+      },
+      gotoIndex(item){
 
+      },
+      openRightIndex(){
+        this.rightOpen=true;
+      },
+      closeRightIndex(){
+        this.rightOpen=false;
       }
     }
 
@@ -95,7 +150,7 @@
   .beginTitle1{
     position: absolute;
     top: 50%;
-    left: 20%;
+    left: 25%;
     color:white;
     font-size: 14px;
     opacity: 1;
@@ -125,6 +180,8 @@
     height: 100%;
     z-index: 1;
     overflow: hidden;
+    transform: translate3d(0px, 0px, 0px);
+    transition: 1s;
   }
   .imageIndex{
     font-weight: bold;
@@ -137,7 +194,7 @@
     transform:translate(-50%,-50%);
   }
   .imageIndexBottom{
-    bottom:0;
+    bottom:-20px;
     transform:translate(-50%,-50%);
     transition: 1s ;
   }
@@ -156,7 +213,7 @@
     font-family: Untitled Sans Medium,Helvetica,Arial,sans-serif;
     font-style: normal;
   }
-  .picTop .midLine{
+  .picTop .midLine1{
     display: inline-block;
     width: 19px;
     height: 1px;
@@ -174,6 +231,11 @@
     display: table-cell;
     vertical-align: middle;
     text-align: center;
+    transition: 1s;
+  }
+  .indexOpen{
+    transform: translate(-25%, 0%);
+    transition: 1s;
   }
   .imageContent img{
     width: calc(100% - 40px);
@@ -186,5 +248,69 @@
     right:0;
     margin:auto;
     position: absolute;
+  }
+  .rightIndex{
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    height: 100%;
+    -ms-flex-align: center;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    z-index: 6;
+    top: 0;
+    left: 0;
+    background: white;
+    cursor: auto;
+    transform: translate(100%, 0%) matrix(1, 0, 0, 1, 0, 0);
+    transition: 1s;
+  }
+  .rightIndexActive{
+    transform: matrix(1, 0, 0, 1, 0, 0);
+    transition: 1s;
+  }
+  .rightTitle{
+    z-index: 0;
+    opacity: 1;
+    padding: 0;
+    top: 0;
+    height: 80px;
+    line-height: 80px;
+    width: 86%;
+    left: 7%;
+    position: absolute;
+    font-size: 12px;
+    text-align: left;
+  }
+  .rightTitle .midLine2{
+    display: inline-block;
+    width: 10px;
+    height: 1px;
+    background-color: #fff;
+    margin: 0 5px;
+    border-top: 1px black solid;
+    top: 1px;
+  }
+  .close{
+    float: right;
+    margin-top: 5px;
+  }
+  .close svg{
+    width: 18px;
+    height: 18px;
+  }
+  .groupDiv{
+    width: 86%;
+    left: 7%;
+    position: relative;
+    overflow: hidden;
+    padding-left: 6px;
+  }
+  .groupDiv li{
+    text-align: left;
+    font-size:14px;
+    line-height: 2.76923;
+    letter-spacing: 0;
   }
 </style>
