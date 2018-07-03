@@ -8,7 +8,7 @@
       <div class="picTop">
         <span @click="openRightIndex">Index</span>
         <span class="midLine1"></span>
-        <span>Thumbs</span>
+        <span @click="OpenIndex">Thumbs</span>
       </div>
 
       <div class="imageContent"  @click="goOther">
@@ -39,7 +39,21 @@
         </ul>
       </div>
     </div>
-    <div class="IndexPage"></div>
+    <div v-show="indexShow" class="indexPage">
+      <div class="indexHeader" @click="closeIndex">
+        <span>Close</span>
+      </div>
+      <div class="indexContent">
+        <div class="indexList">
+          <div class="imgDiv" v-for="item in imgConfig[groupIndex].imgList">
+            <img class="indexImg" :src="item" alt="">
+          </div>
+        </div>
+      </div>
+      <div class="indexFooter">
+        <span>{{groupName}}</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -57,11 +71,12 @@
         rightOpen: false,
         activeGroupIndex: 0,
         imgConfig: imgConfig,
-        groupIndex: 0,
+        groupIndex: 2,
         imgIndex: 0,
         imageIndexB: false,
         whiteOut:false,
-        whiteShow:true
+        whiteShow:true,
+        indexShow:false
       }
     },
     computed: {
@@ -181,7 +196,14 @@
       },
       closeRightIndex() {
         this.rightOpen = false;
+      },
+      OpenIndex(){
+        this.indexShow=true;
+      },
+      closeIndex(){
+        this.indexShow=false;
       }
+
     }
 
 
@@ -405,5 +427,116 @@
     font-size: 14px;
     line-height: 2.76923;
     letter-spacing: 0;
+  }
+  .indexPage{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 7;
+    /*display: none;*/
+    cursor: auto;
+    opacity: 1;
+  }
+  .indexHeader{
+    position: absolute;
+    width: 100%;
+    height: 10%;
+    left: 0;
+    top: 0;
+    z-index: 3;
+    background: #fff;
+    /*opacity: 0;*/
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+  }
+  .indexHeader span{
+    font-family: Untitled Sans,Helvetica,Arial,sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 1.92308;
+    letter-spacing: 0;
+    color: #a3a3a3;
+    cursor: pointer;
+  }
+  .indexContent{
+    position: relative;
+    z-index: 2;
+    display: block;
+    height: 100%;
+    padding: 0 16px;
+    padding-top: 15%;
+  }
+  .indexContent .indexList{
+    box-sizing: border-box;
+    display: block;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0 auto;
+    position: relative;
+    list-style-type: none;
+    height: calc(100% - 120px);
+  }
+  .indexContent .imgDiv{
+    width: 20%;
+    padding: 3px;
+    margin-bottom: 17px;
+    vertical-align: top;
+    display: inline-block;
+    position: relative;
+    zoom: 1;
+    box-sizing: border-box;
+    letter-spacing: normal;
+    word-spacing: normal;
+    white-space: normal;
+  }
+  .imgDiv .indexImg{
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: calc(100% - 6px);
+    height: auto;
+    margin-left: 3px;
+    will-change: opacity,transform;
+  }
+  .indexFooter{
+    position: absolute;
+    width: 100%;
+    height: 80px;
+    left: 0;
+    bottom: 0;
+    z-index: 3;
+    background: #fff;
+    /* opacity: 0; */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    -webkit-box-align: center;
+    align-items: center;
+    -ms-flex-pack: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+  }
+  .indexFooter span{
+    font-family: Untitled Sans,Helvetica,Arial,sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 1.92308;
+    letter-spacing: 0;
+    color: #a3a3a3;
+    cursor: pointer;
   }
 </style>
