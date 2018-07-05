@@ -460,7 +460,7 @@
   .indexHeader{
     position: absolute;
     width: 100%;
-    height: 10%;
+    height: 80px;
     left: 0;
     top: 0;
     z-index: 3;
@@ -488,36 +488,37 @@
     display: block;
     height: 100%;
     padding: 0 16px;
-    padding-top: 15%;
+    padding-top: 80px;
   }
   .indexContent .indexList{
-    box-sizing: border-box;
-    display: block;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
+    height: calc(100% - 160px);
+    -ms-flex-line-pack: start;
+    align-content: flex-start;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    top: 0;
     flex-wrap: wrap;
+    justify-content:flex-start;
     padding: 0;
     margin: 0 auto;
     position: relative;
+    letter-spacing: -.31em;
+    word-spacing: -.43em;
     list-style-type: none;
-    height: calc(100% - 120px);
+    background: rgba(255,255,255,.8);
+    text-align: left;
   }
   .indexContent .imgDiv{
-    width: 20%;
-    padding: 3px;
-    margin-bottom: 17px;
+    position: relative;
     vertical-align: top;
     display: inline-block;
-    position: relative;
     zoom: 1;
-    box-sizing: border-box;
-    letter-spacing: normal;
-    word-spacing: normal;
-    white-space: normal;
+    width: 20%;
+    margin-bottom: 17px;
+    text-align: center;
   }
   .imgDiv .indexImg{
-    position: absolute;
+    position: relative;
     z-index: 2;
     top: 0;
     left: 0;
