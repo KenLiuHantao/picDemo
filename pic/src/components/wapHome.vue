@@ -56,6 +56,7 @@
     </div>
     <div @click="waitLeave" class="waitPage" :class="{waitActive:waitActive}">
       <div class="waitFooter">{{hour}} : {{minute}} : {{ss}} : {{ms}}</div>
+      <img class="randomImg" :class="{randomImgActive:randomImgActive}" :src="randomImg" alt="">
     </div>
   </div>
 </template>
@@ -85,7 +86,10 @@
         ss: '00',
         ms: '00',
         waitTime: 0,
-        run:''
+        run:'',
+        changeImg:'',
+        randomImg:'',
+        randomImgActive:false
       }
     },
     computed: {
@@ -128,6 +132,7 @@
         that.ss = '00';
         that.ms = '00';
         clearInterval(that.run);
+        clearInterval(that.changeImg);
       },
       runTime() {
         let that = this;
@@ -157,6 +162,18 @@
             }
           }
         }, 10)
+        that.changeImg=setInterval(function () {
+          var index=parseInt(Math.random()*that.imgConfig[that.groupIndex].imgList.length)
+          that.randomImg=that.imgConfig[that.groupIndex].imgList[index];
+          that.randomImgActive=true;
+          setTimeout(function () {
+            that.randomImgActive=false;
+          },1000);
+          setTimeout(function () {
+            document.querySelector('.randomImg').style.top=Math.random()*200+'px';
+            document.querySelector('.randomImg').style.left=Math.random()*400+'px';
+          },2000)
+        },5000)
       },
       titleLeave() {
         let that = this;
@@ -671,5 +688,16 @@
     bottom: 0;
     color: #fff;
     text-align: center;
+  }
+  .randomImg{
+    position: absolute;
+    width: 100px;
+    height: auto;
+    opacity: 0;
+    transition: 1s;
+  }
+  .randomImgActive{
+    opacity: 1;
+    transition: 1s;
   }
 </style>
