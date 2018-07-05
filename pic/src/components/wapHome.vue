@@ -33,7 +33,7 @@
       </div>
       <div class="groupDiv">
         <ul>
-          <li v-for="item in imgConfig" @click="gotoIndex(item)">
+          <li v-for="item,index in imgConfig" @click="gotoIndex(item,index)" :class="{bold:index==groupIndex}">
             {{item.name}} ({{item.imgList.length}})
           </li>
         </ul>
@@ -69,7 +69,6 @@
         titleL1: false,
         titleL2: false,
         rightOpen: false,
-        activeGroupIndex: 0,
         imgConfig: imgConfig,
         groupIndex: 2,
         imgIndex: 0,
@@ -188,8 +187,25 @@
           },2000)
         }
       },
-      gotoIndex(item) {
-
+      gotoIndex(item,index) {
+        let that=this;
+        if(that.groupIndex==index){
+          return
+        }
+        that.rightOpen = false;
+        that.whiteShow=true;
+        that.whiteOut = false;
+        that.imageIndexB=false;
+        setTimeout(function () {
+          that.groupIndex=index;
+          that.imgIndex=0
+        },1000);
+        setTimeout(function () {
+          that.whiteOut = true;
+        },1500);
+        setTimeout(function () {
+          that.imageIndexB = true;
+        },2000)
       },
       openRightIndex() {
         this.rightOpen = true;
@@ -379,7 +395,9 @@
     transform: matrix(1, 0, 0, 1, 0, 0);
     transition: 1s;
   }
-
+  .bold{
+    font-weight: bold;
+  }
   .rightTitle {
     z-index: 0;
     opacity: 1;
