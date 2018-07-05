@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="waitTime=0">
     <div class="fullpage1" :class="{leave:fullL}">
       <p v-show="titleE" class="beginTitle1" :class="{titleLeave:titleL1}">Jack Davison</p>
       <p v-show="titleE" class="beginTitle2" :class="{titleLeave:titleL2}">Photo Grapher</p>
@@ -11,7 +11,7 @@
         <span @click="OpenIndex">Thumbs</span>
       </div>
 
-      <div class="imageContent"  @click="goOther">
+      <div class="imageContent" @click="goOther">
         <div v-show="whiteShow" class="whitePage" :class="{whiteOut:whiteOut}"></div>
         <img :src="activeSrc" alt="">
       </div>
@@ -39,13 +39,13 @@
         </ul>
       </div>
     </div>
-    <div v-show="indexShow" class="indexPage">
+    <div class="indexPage" :class="{indexActive:indexShow}">
       <div class="indexHeader" @click="closeIndex">
         <span>Close</span>
       </div>
       <div class="indexContent">
         <div class="indexList">
-          <div class="imgDiv" v-for="item in imgConfig[groupIndex].imgList">
+          <div @click="changeIndex(index)" class="imgDiv" v-for="item,index in imgConfig[groupIndex].imgList">
             <img class="indexImg" :src="item" alt="">
           </div>
         </div>
@@ -53,6 +53,9 @@
       <div class="indexFooter">
         <span>{{groupName}}</span>
       </div>
+    </div>
+    <div @click="waitLeave" class="waitPage" :class="{waitActive:waitActive}">
+      <div class="waitFooter">{{hour}} : {{minute}} : {{ss}} : {{ms}}</div>
     </div>
   </div>
 </template>
@@ -73,9 +76,16 @@
         groupIndex: 2,
         imgIndex: 0,
         imageIndexB: false,
-        whiteOut:false,
-        whiteShow:true,
-        indexShow:false
+        whiteOut: false,
+        whiteShow: true,
+        indexShow: false,
+        waitActive: false,
+        hour: '00',
+        minute: '00',
+        ss: '00',
+        ms: '00',
+        waitTime: 0,
+        run:''
       }
     },
     computed: {
@@ -94,9 +104,60 @@
       setTimeout(function () {
         that.titleE = true;
         that.titleLeave();
-      }, 500)
+      }, 500);
+      setInterval(that.checkWait, 1000);
     },
     methods: {
+      checkWait() {
+        let that = this;
+        console.log(that.waitTime)
+        if (!that.waitActive && that.waitTime < 10) {
+          that.waitTime++
+        } else if (!that.waitActive && that.waitTime >= 10) {
+          that.waitActive = true;
+          setTimeout(function () {
+            that.runTime()
+          }, 1000)
+        }
+      },
+      waitLeave() {
+        let that = this;
+        that.waitActive = false;
+        that.hour = '00';
+        that.minute = '00';
+        that.ss = '00';
+        that.ms = '00';
+        clearInterval(that.run);
+      },
+      runTime() {
+        let that = this;
+        that.run = setInterval(function () {
+          if (parseInt(that.ms) < 1000) {
+            that.ms = (parseInt(that.ms) + 10 + parseInt(Math.random() * 2)).toString()
+          } else {
+            that.ms = '00'
+            if (parseInt(that.ss) < 60 && parseInt(that.ss) > 8) {
+              that.ss = (parseInt(that.ss) + 1).toString()
+            } else if (parseInt(that.ss) < 60 && parseInt(that.ss) <= 8) {
+              that.ss = '0' + (parseInt(that.ss) + 1).toString()
+            } else {
+              that.ss = '00'
+              if (parseInt(that.minute) < 60 && parseInt(that.minute) > 8) {
+                that.minute = (parseInt(that.minute) + 1).toString()
+              } else if (parseInt(that.minute) < 60 && parseInt(that.minute) <= 8) {
+                that.minute = '0' + (parseInt(that.minute) + 1).toString()
+              } else {
+                that.minute = '00'
+                if (parseInt(that.hour) < 60 && parseInt(that.hour) > 8) {
+                  that.hour = (parseInt(that.hour) + 1).toString()
+                } else if (parseInt(that.hour) < 60 && parseInt(that.hour) <= 8) {
+                  that.hour = '0' + (parseInt(that.hour) + 1).toString()
+                }
+              }
+            }
+          }
+        }, 10)
+      },
       titleLeave() {
         let that = this;
         setTimeout(function () {
@@ -114,7 +175,7 @@
           that.whiteGoOut()
         }, 500)
       },
-      whiteGoOut(){
+      whiteGoOut() {
         let that = this;
         setTimeout(function () {
           that.whiteOut = true;
@@ -138,74 +199,74 @@
         }
       },
       goNext() {
-        let that=this;
+        let that = this;
         if (this.imgIndex < this.imgConfig[this.groupIndex].imgList.length - 1) {
           this.imgIndex++
-        }else{
-          that.whiteShow=true;
+        } else {
+          that.whiteShow = true;
           that.whiteOut = false;
-          that.imageIndexB=false;
+          that.imageIndexB = false;
           setTimeout(function () {
-            if(that.groupIndex<that.imgConfig.length-1){
+            if (that.groupIndex < that.imgConfig.length - 1) {
               that.groupIndex++;
-              that.imgIndex=0;
-            }else{
-              that.groupIndex=0;
-              that.imgIndex=0;
+              that.imgIndex = 0;
+            } else {
+              that.groupIndex = 0;
+              that.imgIndex = 0;
             }
-          },1000);
+          }, 1000);
           setTimeout(function () {
             that.whiteOut = true;
-          },1500);
+          }, 1500);
           setTimeout(function () {
             that.imageIndexB = true;
-          },2000)
+          }, 2000)
         }
       },
       goBefore() {
-        let that=this;
+        let that = this;
         if (this.imgIndex > 0) {
           this.imgIndex--
-        }else{
-          that.whiteShow=true;
+        } else {
+          that.whiteShow = true;
           that.whiteOut = false;
-          that.imageIndexB=false;
+          that.imageIndexB = false;
           setTimeout(function () {
-            if(that.groupIndex>0){
+            if (that.groupIndex > 0) {
               that.groupIndex--;
-              that.imgIndex=that.imgConfig[that.groupIndex].imgList.length-1;
-            }else{
-              that.groupIndex=that.imgConfig.length-1;
-              that.imgIndex=that.imgConfig[that.groupIndex].imgList.length-1;
+              that.imgIndex = that.imgConfig[that.groupIndex].imgList.length - 1;
+            } else {
+              that.groupIndex = that.imgConfig.length - 1;
+              that.imgIndex = that.imgConfig[that.groupIndex].imgList.length - 1;
             }
-          },1000);
+          }, 1000);
           setTimeout(function () {
             that.whiteOut = true;
-          },1500);
+          }, 1500);
           setTimeout(function () {
             that.imageIndexB = true;
-          },2000)
+          }, 2000)
         }
       },
-      gotoIndex(item,index) {
-        let that=this;
-        if(that.groupIndex==index){
+      gotoIndex(item, index) {
+        let that = this;
+        if (that.groupIndex == index) {
           return
         }
         that.rightOpen = false;
-        that.whiteShow=true;
+        that.whiteShow = true;
         that.whiteOut = false;
-        that.imageIndexB=false;
+        that.imageIndexB = false;
         setTimeout(function () {
-          that.groupIndex=index;
-          that.imgIndex=0
-        },1000);
+          that.groupIndex = index;
+          that.imgIndex = 0
+        }, 1000);
         setTimeout(function () {
           that.whiteOut = true;
-        },1500);
+        }, 1500);
         setTimeout(function () {
           that.imageIndexB = true;
-        },2000)
+        }, 2000)
       },
       openRightIndex() {
         this.rightOpen = true;
@@ -213,11 +274,15 @@
       closeRightIndex() {
         this.rightOpen = false;
       },
-      OpenIndex(){
-        this.indexShow=true;
+      changeIndex(index) {
+        this.indexShow = false;
+        this.imgIndex = index;
       },
-      closeIndex(){
-        this.indexShow=false;
+      OpenIndex() {
+        this.indexShow = true;
+      },
+      closeIndex() {
+        this.indexShow = false;
       }
 
     }
@@ -335,14 +400,16 @@
     width: 100%;
     height: 100%;
     background: white;
-    z-index:1;
+    z-index: 1;
     transition: 1s;
     margin-top: 0;
   }
-  .whiteOut{
+
+  .whiteOut {
     height: 0;
     transition: 1s;
   }
+
   .imageContent {
     position: absolute;
     width: 100%;
@@ -395,9 +462,11 @@
     transform: matrix(1, 0, 0, 1, 0, 0);
     transition: 1s;
   }
-  .bold{
+
+  .bold {
     font-weight: bold;
   }
+
   .rightTitle {
     z-index: 0;
     opacity: 1;
@@ -446,18 +515,26 @@
     line-height: 2.76923;
     letter-spacing: 0;
   }
-  .indexPage{
+
+  .indexPage {
     position: absolute;
     width: 100%;
     height: 100%;
     left: 0;
-    top: 0;
+    top: 100%;
     z-index: 7;
-    /*display: none;*/
     cursor: auto;
-    opacity: 1;
+    opacity: 0;
+    transition: 1s;
   }
-  .indexHeader{
+
+  .indexActive {
+    top: 0;
+    opacity: 1;
+    transition: 1s;
+  }
+
+  .indexHeader {
     position: absolute;
     width: 100%;
     height: 80px;
@@ -472,8 +549,9 @@
     -ms-flex-pack: center;
     justify-content: center;
   }
-  .indexHeader span{
-    font-family: Untitled Sans,Helvetica,Arial,sans-serif;
+
+  .indexHeader span {
+    font-family: Untitled Sans, Helvetica, Arial, sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 13px;
@@ -482,7 +560,8 @@
     color: #a3a3a3;
     cursor: pointer;
   }
-  .indexContent{
+
+  .indexContent {
     position: relative;
     z-index: 2;
     display: block;
@@ -490,7 +569,8 @@
     padding: 0 16px;
     padding-top: 80px;
   }
-  .indexContent .indexList{
+
+  .indexContent .indexList {
     height: calc(100% - 160px);
     -ms-flex-line-pack: start;
     align-content: flex-start;
@@ -498,17 +578,18 @@
     -webkit-overflow-scrolling: touch;
     top: 0;
     flex-wrap: wrap;
-    justify-content:flex-start;
+    justify-content: flex-start;
     padding: 0;
     margin: 0 auto;
     position: relative;
     letter-spacing: -.31em;
     word-spacing: -.43em;
     list-style-type: none;
-    background: rgba(255,255,255,.8);
+    background: rgba(255, 255, 255, .8);
     text-align: left;
   }
-  .indexContent .imgDiv{
+
+  .indexContent .imgDiv {
     position: relative;
     vertical-align: top;
     display: inline-block;
@@ -517,7 +598,8 @@
     margin-bottom: 17px;
     text-align: center;
   }
-  .imgDiv .indexImg{
+
+  .imgDiv .indexImg {
     position: relative;
     z-index: 2;
     top: 0;
@@ -527,9 +609,10 @@
     width: calc(100% - 6px);
     height: auto;
     margin-left: 3px;
-    will-change: opacity,transform;
+    will-change: opacity, transform;
   }
-  .indexFooter{
+
+  .indexFooter {
     position: absolute;
     width: 100%;
     height: 80px;
@@ -548,8 +631,9 @@
     -webkit-box-pack: center;
     justify-content: center;
   }
-  .indexFooter span{
-    font-family: Untitled Sans,Helvetica,Arial,sans-serif;
+
+  .indexFooter span {
+    font-family: Untitled Sans, Helvetica, Arial, sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 13px;
@@ -557,5 +641,35 @@
     letter-spacing: 0;
     color: #a3a3a3;
     cursor: pointer;
+  }
+
+  .waitPage {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 100;
+    background-color: #191919;
+    opacity: 0;
+    transform: translate(0%, 100%) matrix(1, 0, 0, 1, 0, 0);
+    transition: 1s;
+  }
+
+  .waitActive {
+    opacity: 1;
+    transform: matrix(1, 0, 0, 1, 0, 0);
+    transition: 1s;
+  }
+
+  .waitPage .waitFooter {
+    position: absolute;
+    width: 100%;
+    height: 80px;
+    line-height: 80px;
+    left: 0;
+    bottom: 0;
+    color: #fff;
+    text-align: center;
   }
 </style>
