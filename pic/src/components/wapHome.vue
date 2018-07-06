@@ -406,7 +406,6 @@
     display: inline-block;
     width: 19px;
     height: 1px;
-    background-color: #fff;
     margin: 0 5px;
     border-bottom: 1px black solid;
     top: 1px;

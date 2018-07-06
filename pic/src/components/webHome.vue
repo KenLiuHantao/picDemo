@@ -1,8 +1,8 @@
 <template>
   <div @click="waitTime=0">
     <div class="fullpage1" :class="{leave:fullL}">
-      <p v-show="titleE" class="beginTitle1" :class="{titleLeave:titleL1}">Jack Davison</p>
-      <p v-show="titleE" class="beginTitle2" :class="{titleLeave:titleL2}">Photo Grapher</p>
+      <p class="beginTitle1" :class="{titleLeave:titleL1,titleShow:titleE1}">Jack Davison</p>
+      <p class="beginTitle2" :class="{titleLeave:titleL2,titleShow:titleE2}">Photo Grapher</p>
     </div>
     <div class="fullpage2" :class="{indexOpen:rightOpen}">
       <div @click="goOther" class="picTop">
@@ -13,7 +13,7 @@
         <div v-show="whiteShow" class="whitePage" :class="{whiteOut:whiteOut}"></div>
         <img :src="activeSrc" alt="">
       </div>
-      <p class="imageIndex"  :class="{imageIndexBottom:imageIndexB}">
+      <p class="imageIndex imageIndexBottom" >
         <span @click="openRightIndex">Index</span>
         <span class="midLine1"></span>
         <span @click="OpenIndex">Thumbs</span>
@@ -42,7 +42,7 @@
     </div>
     <div class="indexPage" :class="{indexActive:indexShow}">
       <div class="indexHeader" @click="closeIndex">
-        <span>Close</span>
+
       </div>
       <div class="indexContent">
         <div class="indexList">
@@ -53,6 +53,8 @@
       </div>
       <div class="indexFooter">
         <span>{{groupName}}</span>
+        <span class="midLine1"></span>
+        <span class="closeSpan" @click="closeIndex">Close</span>
       </div>
     </div>
     <div @click="waitLeave" class="waitPage" :class="{waitActive:waitActive}">
@@ -70,7 +72,8 @@
     data() {
       return {
         fullL: false,
-        titleE: false,
+        titleE1: false,
+        titleE2: false,
         titleL1: false,
         titleL2: false,
         rightOpen: false,
@@ -107,9 +110,12 @@
     mounted() {
       let that = this;
       setTimeout(function () {
-        that.titleE = true;
+        that.titleE1 = true;
         that.titleLeave();
-      }, 500);
+      }, 1000);
+      setTimeout(function () {
+        that.titleE2 = true;
+      },1500)
       setInterval(that.checkWait, 1000);
     },
     methods: {
@@ -171,8 +177,8 @@
             that.randomImgActive=false;
           },1000);
           setTimeout(function () {
-            document.querySelector('.randomImg').style.top=Math.random()*200+'px';
-            document.querySelector('.randomImg').style.left=Math.random()*400+'px';
+            document.querySelector('.randomImg').style.top=Math.random()*50+'%';
+            document.querySelector('.randomImg').style.left=Math.random()*50+'%';
           },2000)
         },5000)
       },
@@ -333,7 +339,7 @@
     left: 10%;
     color: white;
     font-size: 14px;
-    opacity: 1;
+    opacity: 0;
     font-weight: bold;
     transform: translate(-50%, -50%);
   }
@@ -344,9 +350,13 @@
     left: 25%;
     color: white;
     font-size: 14px;
-    opacity: 1;
+    opacity: 0;
     /*font-weight: bold;*/
     transform: translate(-50%, -50%);
+  }
+  .titleShow{
+    opacity: 1;
+    transition: 0.5s;
   }
 
   .titleLeave {
@@ -414,7 +424,6 @@
     display: inline-block;
     width: 19px;
     height: 1px;
-    background-color: #fff;
     margin: 0 5px;
     border-bottom: 1px black solid;
     top: 1px;
@@ -591,7 +600,7 @@
     z-index: 2;
     display: block;
     height: 100%;
-    padding: 0 16px;
+    padding: 0 6%;
     padding-top: 80px;
   }
 
@@ -635,6 +644,7 @@
     height: auto;
     margin-left: 3px;
     will-change: opacity, transform;
+    cursor: pointer;
   }
 
   .indexFooter {
@@ -660,10 +670,21 @@
   .indexFooter span {
     font-family: Untitled Sans, Helvetica, Arial, sans-serif;
     font-style: normal;
-    font-weight: 400;
     font-size: 13px;
     line-height: 1.92308;
     letter-spacing: 0;
+    color: black;
+    cursor: pointer;
+  }
+  .indexFooter .midLine1{
+    display: inline-block;
+    width: 19px;
+    height: 1px;
+    margin: 0 5px;
+    border-bottom: 1px black solid;
+    top: 1px;
+  }
+  .indexFooter .closeSpan{
     color: #a3a3a3;
     cursor: pointer;
   }
