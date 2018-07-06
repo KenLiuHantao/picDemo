@@ -19,18 +19,19 @@
         <span @click="OpenIndex">Thumbs</span>
       </p>
     </div>
-    <div class="rightIndex" :class="{rightIndexActive:rightOpen}">
-      <div class="rightTitle">
+    <div class="rightIndexBg" :class="{rightIndexBgActive:rightOpen}" @click="closeRightIndex"></div>
+    <div class="rightIndex " @mouseenter="rightIndexHover=false" @mouseout="rightIndexHover=true" :class="{rightIndexActive:rightOpen,rightIndexHover:rightIndexHover}">
+      <div class="rightBottom">
         <span>Email</span>
         <span class="midLine2"></span>
         <span>Instagram</span>
         <span class="midLine2"></span>
         <span style="font-weight: bold">Mini Title</span>
-        <span class="close">
-          <svg @click="closeRightIndex" viewBox="0 0 45 45"><title>Close 1.1</title><path
-            d="M22.5 21.5L44 0l1 1-21.5 21.5L45 44l-1 1-21.5-21.5L1 45l-1-1 21.5-21.5L0 1l1-1z"></path><path
-            d="M22.5 21.5L44 0l1 1-21.5 21.5L45 44l-1 1-21.5-21.5L1 45l-1-1 21.5-21.5L0 1l1-1z"></path></svg>
-        </span>
+        <!--<span class="close">-->
+          <!--<svg @click="closeRightIndex" viewBox="0 0 45 45"><title>Close 1.1</title><path-->
+            <!--d="M22.5 21.5L44 0l1 1-21.5 21.5L45 44l-1 1-21.5-21.5L1 45l-1-1 21.5-21.5L0 1l1-1z"></path><path-->
+            <!--d="M22.5 21.5L44 0l1 1-21.5 21.5L45 44l-1 1-21.5-21.5L1 45l-1-1 21.5-21.5L0 1l1-1z"></path></svg>-->
+        <!--</span>-->
       </div>
       <div class="groupDiv">
         <ul>
@@ -93,7 +94,8 @@
         run:'',
         changeImg:'',
         randomImg:'',
-        randomImgActive:false
+        randomImgActive:false,
+        rightIndexHover:true
       }
     },
     computed: {
@@ -473,7 +475,21 @@
     margin: auto;
     position: absolute;
   }
-
+  .rightIndexBg{
+    background: black;
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: 1s;
+    z-index: -1;
+  }
+  .rightIndexBgActive{
+    cursor: pointer;
+    z-index: 3;
+    opacity:0.85;
+    transition: 1s;
+  }
   .rightIndex {
     display: flex;
     -ms-flex-direction: row;
@@ -482,40 +498,43 @@
     -ms-flex-align: center;
     align-items: center;
     position: absolute;
-    width: 100%;
+    width: 50%;
     z-index: 6;
     top: 0;
-    left: 0;
+    left: 50%;
     background: white;
     cursor: auto;
-    transform: translate(100%, 0%) matrix(1, 0, 0, 1, 0, 0);
+    transform: translate(100%, 0%);
     transition: 1s;
   }
 
   .rightIndexActive {
-    transform: matrix(1, 0, 0, 1, 0, 0);
+    transform: translate(0, 0);
     transition: 1s;
+  }
+  .rightIndexHover{
+    transition: 1s;
+    transform: translate(10%, 0) matrix(1, 0, 0, 1, 0, 0);;
   }
 
   .bold {
     font-weight: bold;
   }
 
-  .rightTitle {
+  .rightBottom {
     z-index: 0;
     opacity: 1;
     padding: 0;
-    top: 0;
+    bottom: 0;
     height: 80px;
     line-height: 80px;
-    width: 86%;
-    left: 7%;
+    width: 100%;
     position: absolute;
     font-size: 12px;
-    text-align: left;
+    text-align: center;
   }
 
-  .rightTitle .midLine2 {
+  .rightBottom .midLine2 {
     display: inline-block;
     width: 10px;
     height: 1px;
@@ -536,8 +555,8 @@
   }
 
   .groupDiv {
-    width: 86%;
-    left: 7%;
+    width: 50%;
+    left: 45%;
     position: relative;
     overflow: hidden;
     padding-left: 6px;
@@ -545,8 +564,8 @@
 
   .groupDiv li {
     text-align: left;
-    font-size: 14px;
-    line-height: 2.76923;
+    font-size: 12px;
+    line-height: 2.08333;
     letter-spacing: 0;
   }
 
